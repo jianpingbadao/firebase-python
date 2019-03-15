@@ -74,8 +74,9 @@ class MyFirebase:
         """
         Save the database into file
         """
+        print("Save database to file %s" % output_file)
         database = self.fb.get(self.url, None)
-        print(database)
+        # print(database)
         with open(output_file, 'w') as fp:
             json.dump(database, fp)
 
@@ -85,12 +86,55 @@ class MyFirebase:
         Backup the database
         """
         current_time = datetime.datetime.utcnow()
+        backup_folder = self.get_backup_folder()
+
+        backup_file = os.path.join(backup_folder, 'UTC - ' + str(current_time) + '.json')
+        self.save_database_to_file(backup_file)
+
+
+    def get_latest_backup(self):
+        """
+        Get the latest backup file
+        """
+        backup_folder = self.get_backup_folder()
+        files = os.listdir(backup_folder)
+        files = [f for f in files if os.path.isfile(os.path.join(backup_folder, f)) and not f.startswith('.')]
+        files = sorted(files)
+        if files:
+            latest = files[-1]
+            return os.path.join(backup_folder, latest)
+
+        return None
+
+
+    def recover_from_latest_backup(self):
+        """
+        Load the latest backup into the database
+        """
+        latest_backup = self.get_latest_backup()
+        if not latest_backup:
+            print("No backup available.")
+            return
+
+        with open(latest_backup, 'r') as fp:
+            database = json.load(fp)
+
+        # print(database)
+        print("recover from %s" % latest_backup)
+        for top_key, values in database.items():
+            self.fb.put(self.url, top_key, values)
+
+
+    def get_backup_folder(self):
+        """
+        Get the backup folder
+        """
         backup_folder = os.path.join(os.getcwd(), 'backup')
         if not os.path.isdir(backup_folder):
             os.mkdir(backup_folder)
+        return backup_folder
 
-        backup_file = os.path.join(backup_folder, 'UTC - ' + str(current_time))
-        self.save_database_to_file(backup_file)
+
 
 if __name__ == '__main__':
     myfb = MyFirebase(FIREBASE_URL)
