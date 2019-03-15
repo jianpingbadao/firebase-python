@@ -1,5 +1,5 @@
 # firebase-python
-Connect to firebase, read and write
+Connect to Firebase Realtime Database, and execute CRUD operations.
 
 ## Setup
 
