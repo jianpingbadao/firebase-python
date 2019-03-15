@@ -105,3 +105,4 @@ venv.bak/
 
 .vscode
 firebase_profile.py
+backup/

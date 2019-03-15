@@ -1,3 +1,7 @@
+import json
+import datetime
+import os
+
 from firebase import firebase
 
 from firebase_profile import FIREBASE_URL
@@ -65,6 +69,28 @@ class MyFirebase:
             # TODO: add some checking?
             self.fb.delete(parent_url, node)
 
+
+    def save_database_to_file(self, output_file):
+        """
+        Save the database into file
+        """
+        database = self.fb.get(self.url, None)
+        print(database)
+        with open(output_file, 'w') as fp:
+            json.dump(database, fp)
+
+
+    def backup_database(self):
+        """
+        Backup the database
+        """
+        current_time = datetime.datetime.utcnow()
+        backup_folder = os.path.join(os.getcwd(), 'backup')
+        if not os.path.isdir(backup_folder):
+            os.mkdir(backup_folder)
+
+        backup_file = os.path.join(backup_folder, 'UTC - ' + str(current_time))
+        self.save_database_to_file(backup_file)
 
 if __name__ == '__main__':
     myfb = MyFirebase(FIREBASE_URL)
