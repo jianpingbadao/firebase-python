@@ -5,8 +5,11 @@ Connect to Firebase Realtime Database, and execute CRUD operations.
 
 Refer to [Python Firebase](https://ozgur.github.io/python-firebase/)
 
-    $ sudo pip install requests
-    $ sudo pip install python-firebase
+    $ pip install requests
+    $ pip install python-firebase
+
+**Had some trouble to get it work under `Python 3.7`. It works with `Python 3.6`.**
+
 
 
 ## To Run
