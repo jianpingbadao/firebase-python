@@ -37,6 +37,7 @@ class MyFirebase:
     def __init__(self, url, auth=None):
         self.url = url
         self.fb = firebase.FirebaseApplication(url, auth)
+        self.url_potholes = self.url + '/potholes'
 
 
     def rename_node(self, parent_url, old_node, new_node):
@@ -161,6 +162,30 @@ class MyFirebase:
         return backup_folder
 
 
+    def pothole_exist(self, pothole: Pothole):
+        """
+        Check if the given pothole is already existing in the database.
+
+        Returns
+        -------
+        True if pothole already exists.
+        """
+        potholes = self.fb.get(self.url_potholes, None)
+        for _, pot in potholes.items():
+            if pot['latitude'] == pothole.lat and pot['longitude'] == pothole.lng:
+                return True
+        return False
+
+
+    def post_pothole(self, pothole: Pothole):
+        """
+        Add given pothole into the database via POST
+        """
+        if self.pothole_exist(pothole):
+            print("pothole exists")
+            return
+
+        self.fb.post(self.url_potholes, pothole.to_dict())
 
 if __name__ == '__main__':
     myfb = MyFirebase(FIREBASE_URL)
