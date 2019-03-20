@@ -19,6 +19,7 @@ Put the following in `firebase_profile.py`:
 FIREBASE_URL = "https://YOUR-APP-NAME.firebaseio.com"
 ```
 
-### Important links
+### Useful links
 - [Firebase Rest API](https://firebase.google.com/docs/database/rest/start)
 - [Firebase](https://firebase.google.com/)
+- [Convert Image to Data URI](https://ezgif.com/image-to-datauri)
