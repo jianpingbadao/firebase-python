@@ -7,6 +7,32 @@ from firebase import firebase
 from firebase_profile import FIREBASE_URL
 
 
+class Pothole:
+    def __init__(self, lat: float, lng: float, depth: str=None, length: str=None, image: str=None):
+        self.lat = lat
+        self.lng = lng
+        self.depth = depth
+        self.length = length
+        self.image = image
+
+
+    def to_dict(self):
+        """
+        Format the pothole to a dictionary so that it is easier to be added into the database.
+        """
+        obj = {}
+        obj['latitude'] = self.lat
+        obj['longitude'] = self.lng
+        if self.depth:
+            obj['depth'] = self.depth
+        if self.length:
+            obj['length'] = self.length
+        if self.image:
+            obj['image'] = self.image
+        return obj
+
+
+
 class MyFirebase:
     def __init__(self, url, auth=None):
         self.url = url
